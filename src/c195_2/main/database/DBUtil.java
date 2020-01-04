@@ -9,7 +9,7 @@ import java.sql.Statement;
 
 public class DBUtil {
 
-//	private Connection conn = null;
+	public Connection conn = null;
 //	private Statement stmt = null;
 	private String dbUser = null;
 	private String dbPass = null;
@@ -22,12 +22,17 @@ public class DBUtil {
 	final String DBPASS = "53688406683";
 
 	public void insert(String sql, String... params) {
-		Connection conn = getConnection();
+		conn = getConnection();
 		try {
 			PreparedStatement prepareStatement = conn.prepareStatement(sql);
 			for (int i = 0; i < params.length; i++) {
 				String string = params[i];
-				prepareStatement.setString(i+1, string);
+				if(string.equalsIgnoreCase("true")) {
+					prepareStatement.setInt(i+1, 1);
+				} else {
+					prepareStatement.setString(i+1, string);
+					
+				}
 			}
 			prepareStatement.execute();
 //			stmt.execute(sql);
@@ -35,16 +40,18 @@ public class DBUtil {
 			ex.printStackTrace();
 
 		} finally {
-			closeConnection(conn);
+			//closeConnection();
 		}
 	}
 
 	public Connection getConnection() {
-		Connection conn = null;
+		
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			System.out.println("Connecting to database...");
-			conn = DriverManager.getConnection(DB_URL, DBUSER, DBPASS);
+			if(conn == null) {
+				conn = DriverManager.getConnection(DB_URL, DBUSER, DBPASS);
+			}
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -54,7 +61,7 @@ public class DBUtil {
 
 	}
 
-	public void closeConnection(Connection conn) {
+	public void closeConnection() {
 		try {
 			if (conn != null) {
 				conn.close();
@@ -63,6 +70,33 @@ public class DBUtil {
 			e.printStackTrace();
 		} 
 	}
+	
+	public ResultSet queryDatabase(String sql, String... params) {
+		conn = getConnection();
+		try {
+			PreparedStatement prepareStatement = conn.prepareStatement(sql);
+			for (int i = 0; i < params.length; i++) {
+				String string = params[i];
+				if(string.equalsIgnoreCase("true")) {
+					prepareStatement.setInt(i+1, 1);
+				} else {
+					prepareStatement.setString(i+1, string);
+					
+				}
+			}
+			ResultSet rs = prepareStatement.executeQuery();
+			return rs;
+
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+
+		} finally {
+			//closeConnection();
+		}
+		return null;
+
+	}
+
 
 	public void queryDatabase(String s) {
 
@@ -83,7 +117,7 @@ public class DBUtil {
 			ex.printStackTrace();
 
 		} finally {
-			closeConnection(conn);
+			//closeConnection();
 		}
 
 	}

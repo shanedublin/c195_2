@@ -5,6 +5,8 @@ import static org.junit.Assert.*;
 import java.sql.Date;
 import java.time.LocalDateTime;
 
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,6 +18,11 @@ public class DBUtilTest {
 	@Before
 	public void beforeEach() {
 		util = new DBUtil();
+	}
+	
+	@After
+	public void afterClose() {
+		util.closeConnection();
 	}
 	
 	@Test
