@@ -9,7 +9,6 @@ import org.junit.Test;
 import c195_2.main.database.DBUtil;
 
 public class CountryDAOImplTest {
-
 	
 	CountryDAO dao;
 	
@@ -28,6 +27,16 @@ public class CountryDAOImplTest {
 		Country c = new Country();
 		c.country = "United States";
 		dao.addOrUpdate(c);
+		assertTrue(c.countryId > 5);
+	}
+	
+	@Test
+	public void testupdate() {
+		Country c = new Country();
+		c.country = "United States";
+		c.countryId = 2;
+		c = dao.addOrUpdate(c);
+		assertEquals(2, c.countryId.intValue());
 	}
 	
 	@Test

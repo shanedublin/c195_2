@@ -39,15 +39,18 @@ public class CustomerScene {
 
 	Button saveButton = new Button("Save");
 	Button cancelButton = new Button("Cancel");
-
+	Button deleteButton = new Button("Delete");
 
 	public Scene s = new Scene(pane, 480, 480);
 	private Main main;
+	CustomerView cv = new CustomerView();
 	CustomerBO customerBO = new CustomerBO();
+	CustomerDAO dao = new CustomerDAOImpl();
 
 	{
 		cancelButton.setOnAction((event) -> main.switchScene("home"));
 		saveButton.setOnAction((event) -> this.save(event));
+		deleteButton.setOnAction((event) -> this.delete(event));
 
 		pane.setPadding(new Insets(10, 10, 10, 10));
 
@@ -69,28 +72,49 @@ public class CustomerScene {
 		pane.add(phoneText, 1, 6);
 		pane.add(saveButton, 0, 7);
 		pane.add(cancelButton, 1, 7);
+		
 	}
 
 	public void save(ActionEvent event) {
-		Customer customer = new Customer();
-		Address address = new Address();
-		City city = new City();
-		Country country = new Country();
 
-		customer.customerName = name.getText();
-		address.address = addressText.getText();
-		address.address2 = address2Text.getText();
-		address.postalCode = postalText.getText();
-		address.phone = phoneText.getText();
-		city.city = cityText.getText();
-		country.country = countryText.getText();
+		cv.customer.setCustomerName(name.getText());
+		cv.address.address = addressText.getText();
+		cv.address.address2 = address2Text.getText();
+		cv.address.postalCode = postalText.getText();
+		cv.address.phone = phoneText.getText();
+		cv.city.city = cityText.getText();
+		cv.country.country = countryText.getText();
 
-		customerBO.saveCustomer(customer, country, city, address);
+		customerBO.saveCustomer(cv);
 
+	}
+
+	private void delete(ActionEvent event) {
+		dao.delete(cv.customer.customerId);
+		main.switchScene("home");
+		
 	}
 
 	public CustomerScene(Main main) {
 		this.main = main;
+	}
+
+	public void setCustomer(CustomerView c) {
+		if (c == null) {
+			pane.getChildren().remove(deleteButton);
+			return;
+		}
+		pane.add(deleteButton, 2, 7);
+		cv = c;
+		//cv = customerBO.loadCustomer(c.customerId);
+		name.setText(cv.customer.customerName);
+		addressText.setText(cv.address.address);
+		address2Text.setText(cv.address.address2);
+		postalText.setText(cv.address.postalCode);
+		phoneText.setText(cv.address.phone);
+		cityText.setText(cv.city.city);
+		countryText.setText(cv.country.country);
+
 	}
 
 }

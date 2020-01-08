@@ -18,11 +18,11 @@ public class DBUtil {
 	// Database credentials
 	final String DBUSER = "U051Ai";
 	final String DBPASS = "53688406683";
-
-	public void insert(String sql, String... params) {
+	
+	public Integer insert(String sql, String... params) {
 		conn = getConnection();
 		try {
-			PreparedStatement prepareStatement = conn.prepareStatement(sql);
+			PreparedStatement prepareStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			for (int i = 0; i < params.length; i++) {
 				String string = params[i];
 				if(string.equalsIgnoreCase("true")) {
@@ -32,14 +32,22 @@ public class DBUtil {
 					
 				}
 			}
-			prepareStatement.execute();
-//			stmt.execute(sql);
+			System.out.println(prepareStatement.toString());
+			prepareStatement.executeUpdate();
+			ResultSet rs = prepareStatement.getGeneratedKeys();
+			{
+				if(rs.next()) {
+					return (int) rs.getLong(1);
+				}
+			}
+			//			stmt.execute(sql);
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 
 		} finally {
 			//closeConnection();
 		}
+		return -1;
 	}
 
 	public Connection getConnection() {
@@ -84,6 +92,7 @@ public class DBUtil {
 					
 				}
 			}
+			System.out.println(prepareStatement.toString());
 			ResultSet rs = prepareStatement.executeQuery();
 			return rs;
 
@@ -98,28 +107,5 @@ public class DBUtil {
 	}
 
 
-	public void queryDatabase(String s) {
-
-		Connection conn = getConnection();
-		Statement stmt;
-
-		ResultSet rs = null;
-		try {
-
-			stmt = conn.createStatement();
-			rs = stmt.executeQuery("SELECT * FROM country");
-//			conn.commit();
-			while (rs.next()) {
-				String country = rs.getString(2);
-				System.out.println(country);
-			}
-		} catch (SQLException ex) {
-			ex.printStackTrace();
-
-		} finally {
-			//closeConnection();
-		}
-
-	}
 
 }

@@ -9,5 +9,10 @@ public class Address extends Entity{
 	public Integer cityId;
 	public String postalCode;
 	public String phone;
+	
+	@Override
+	public String toString() {
+		return "Address: " + address;
+	}
 
 }

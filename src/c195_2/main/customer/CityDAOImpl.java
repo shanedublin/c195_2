@@ -12,12 +12,20 @@ public class CityDAOImpl implements CityDAO{
 	
 	@Override
 	public City addOrUpdate(City c) {
+		String sql = "";
+		if(c.cityId == null) {
+			sql = "insert into city (city, countryId, createDate, createdBy, lastUpdate, lastUpdateBy) values(?,?,?,?,?,?)";
+		} else {
+			sql = "update city set city = ?, countryId = ?, createDate = ?, createdBy = ?, lastUpdate = ?, lastUpdateBy= ? where cityId = " + c.cityId;
+		}
 		
-		String sql = "insert into city (city, countryId, createDate, createdBy, lastUpdate, lastUpdateBy) values(?,?,?,?,?,?)";
 		Date d = new Date(System.currentTimeMillis());
-		util.insert(sql, c.city,c.countryId +"", d.toString(), "Shane", d.toString(),"Shane");
-		// TODO Auto-generated method stub
-		return null;
+		Integer id = util.insert(sql, c.city,c.countryId +"", d.toString(), "Shane", d.toString(),"Shane");
+		if(c.cityId == null) {
+			c.cityId = id;
+		}
+
+		return c;
 	}
 
 	@Override

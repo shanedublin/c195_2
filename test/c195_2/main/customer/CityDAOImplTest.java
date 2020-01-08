@@ -22,6 +22,8 @@ public class CityDAOImplTest {
 		c.city = "Huston";
 		c.countryId = 1;
 		dao.addOrUpdate(c);
+		System.out.println(c.cityId);
+		assertTrue(c.cityId > 2);
 	}
 
 }

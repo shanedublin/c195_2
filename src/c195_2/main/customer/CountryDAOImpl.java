@@ -12,12 +12,18 @@ public class CountryDAOImpl implements CountryDAO{
 	
 	@Override
 	public Country addOrUpdate(Country c) {
-		
-		String sql = "insert into country (country, createDate, createdBy, lastUpdate, lastUpdateBy) values(?,?,?,?,?)";
+		String sql = "";
 		Date d = new Date(System.currentTimeMillis());
-		util.insert(sql, c.country,d.toString(), "Shane", d.toString(),"Shane");
-		// TODO Auto-generated method stub
-		return null;
+		if(c.countryId == null) {
+			sql = "insert into country (country, createDate, createdBy, lastUpdate, lastUpdateBy) values(?,?,?,?,?)";
+		} else {
+			sql = "update country set country = ?, createDate = ?, createdBy = ?, lastUpdate = ?, lastUpdateBy = ? where countryId = " + c.countryId;
+		}
+		Integer id = util.insert(sql, c.country,d.toString(), "Shane", d.toString(),"Shane");
+		if(c.countryId == null) {
+			c.countryId = id;
+		}
+		return c;
 	}
 
 	@Override

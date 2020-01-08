@@ -7,5 +7,10 @@ public class City extends Entity {
 	public Integer cityId;
 	public String city;
 	public Integer countryId;
+	
+	@Override
+	public String toString() {
+		return "City " + city;
+	}
 
 }

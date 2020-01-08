@@ -12,12 +12,19 @@ public class AddressDAOImpl implements AddressDAO{
 	
 	@Override
 	public Address addOrUpdate(Address c) {
+		String sql = "";
+		if(c.addressId == null) {
+			sql = "insert into address (address, address2, postalCode, phone, cityId, createDate, createdBy, lastUpdate, lastUpdateBy) values(?,?,?,?,?,?,?,?,?)";
+		} else {
+			sql = "update address set address = ?, address2 = ?, postalCode = ?, phone = ?, cityId = ?, createDate = ?, createdBy = ?, lastUpdate = ?, lastUpdateBy = ? where addressId = " + c.addressId;
+		}
 		
-		String sql = "insert into address (address, address2, postalCode, phone, cityId, createDate, createdBy, lastUpdate, lastUpdateBy) values(?,?,?,?,?,?,?,?,?)";
 		Date d = new Date(System.currentTimeMillis());
-		util.insert(sql, c.address,c.address2, c.postalCode, c.phone, c.cityId +"", d.toString(), "Shane", d.toString(),"Shane");
-		// TODO Auto-generated method stub
-		return null;
+		Integer id = util.insert(sql, c.address,c.address2, c.postalCode, c.phone, c.cityId +"", d.toString(), "Shane", d.toString(),"Shane");
+		if(c.addressId == null) {
+			c.addressId = id;
+		}
+		return c;
 	}
 
 	@Override
@@ -28,8 +35,8 @@ public class AddressDAOImpl implements AddressDAO{
 
 	@Override
 	public Address find(Address c) {
-		String sql = "Select addressId, address from address c where c.address like ?";
-		ResultSet queryDatabase = util.queryDatabase(sql, c.address);
+		String sql = "Select addressId, address from address c where c.addressId = ?";
+		ResultSet queryDatabase = util.queryDatabase(sql, c.addressId +"");
 		// TODO Auto-generated method stub;
 		c = new Address();
 		try {

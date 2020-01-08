@@ -4,17 +4,12 @@ import c195_2.main.appointment.AppointmentScene;
 import c195_2.main.calandar.Calandar;
 import c195_2.main.customer.CustomerScene;
 import c195_2.main.customer.CustomerTable;
+import c195_2.main.customer.CustomerView;
 import c195_2.main.database.DBUtil;
 import c195_2.main.home.Home;
 import c195_2.main.login.Login;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.input.KeyCode;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -35,11 +30,11 @@ public class Main extends Application {
 		primaryStage.setTitle("C195");
 		 
 		Group root = new Group();
-		Scene s = new DefaultScene(root, 480,480, primaryStage);
+		//Scene s = new DefaultScene(root, 480,480, primaryStage);
 		primaryStage.setTitle("App");
 		
 		root.getChildren();
-		primaryStage.setScene(customerTable.s);
+		primaryStage.setScene(home.s);
 		primaryStage.show();
 		primaryStage.setOnCloseRequest(e -> exit());
 
@@ -53,8 +48,7 @@ public class Main extends Application {
 		launch(args);
 	}
 	
-	
-	public void switchScene(String scene) {
+	public void switchScene(String scene, Object o) {
 		scene = scene.toLowerCase();
 		switch (scene) {
 		case "home":
@@ -63,10 +57,13 @@ public class Main extends Application {
 			break;
 		case "customer":
 			stage.setTitle("customer");
+			customer = new CustomerScene(this);
+			customer.setCustomer((CustomerView) o);
 			stage.setScene(customer.s);
 			break;
 		case "customer_list":
 			stage.setTitle("customer list");
+			customerTable = new CustomerTable(this);
 			stage.setScene(customerTable.s);
 			customerTable.init();
 			break;
@@ -78,10 +75,16 @@ public class Main extends Application {
 			stage.setTitle("calandar");
 			stage.setScene(calandar.s);
 			break;
-
+			
 		default:
 			break;
 		}
+		
+	}
+	
+	
+	public void switchScene(String scene) {
+		switchScene(scene, null);
 	}
 
 }

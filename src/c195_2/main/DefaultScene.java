@@ -13,6 +13,7 @@ public class DefaultScene extends Scene {
 		this.setOnKeyPressed((event) -> {
 			if(event.getCode() == KeyCode.ESCAPE) {
 				primaryStage.close();
+				
 			}
 		});
 		// TODO Auto-generated constructor stub
