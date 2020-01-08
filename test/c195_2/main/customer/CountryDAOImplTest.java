@@ -6,6 +6,8 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
+import c195_2.main.database.DBUtil;
+
 public class CountryDAOImplTest {
 
 	
@@ -18,7 +20,7 @@ public class CountryDAOImplTest {
 	
 	@AfterClass
 	public static void AfterClass(){
-		
+		DBUtil.closeConnection();
 	}
 	
 	@Test
@@ -34,6 +36,14 @@ public class CountryDAOImplTest {
 		c.country = "United States";
 		Country find = dao.find(c);
 		assertNotNull(find.countryId);
+	}
+	
+	@Test
+	public void testFindNull() {
+		Country c = new Country();
+		c.country = "blah blah";
+		Country find = dao.find(c);
+		assertNull(find.country);
 	}
 
 }

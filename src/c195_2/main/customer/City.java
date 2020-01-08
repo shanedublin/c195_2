@@ -4,8 +4,8 @@ import c195_2.main.Entity;
 
 public class City extends Entity {
 	
-	public int cityId;
+	public Integer cityId;
 	public String city;
-	public int countryId;
+	public Integer countryId;
 
 }

@@ -3,6 +3,8 @@ package c195_2.main;
 import c195_2.main.appointment.AppointmentScene;
 import c195_2.main.calandar.Calandar;
 import c195_2.main.customer.CustomerScene;
+import c195_2.main.customer.CustomerTable;
+import c195_2.main.database.DBUtil;
 import c195_2.main.home.Home;
 import c195_2.main.login.Login;
 import javafx.application.Application;
@@ -21,9 +23,10 @@ public class Main extends Application {
 	Home home = new Home(this);
 	AppointmentScene appointment = new AppointmentScene(this);
 	CustomerScene customer = new CustomerScene(this);
+	CustomerTable customerTable = new CustomerTable(this);
 	Calandar calandar = new Calandar(this);
 	
-	Stage stage;
+	public Stage stage;
 	
 
 	@Override
@@ -32,22 +35,24 @@ public class Main extends Application {
 		primaryStage.setTitle("C195");
 		 
 		Group root = new Group();
-		Scene s = new Scene(root, 480,480);
+		Scene s = new DefaultScene(root, 480,480, primaryStage);
 		primaryStage.setTitle("App");
-		s.setOnKeyPressed((event) -> {
-			if(event.getCode() == KeyCode.ESCAPE) {
-				primaryStage.close();
-			}
-		});
+		
 		root.getChildren();
-		primaryStage.setScene(login.s);
+		primaryStage.setScene(customerTable.s);
 		primaryStage.show();
+		primaryStage.setOnCloseRequest(e -> exit());
 
+	}
+	
+	public void exit() {
+		DBUtil.closeConnection();
 	}
 
 	public static void main(String args[]) {
 		launch(args);
 	}
+	
 	
 	public void switchScene(String scene) {
 		scene = scene.toLowerCase();
@@ -59,6 +64,11 @@ public class Main extends Application {
 		case "customer":
 			stage.setTitle("customer");
 			stage.setScene(customer.s);
+			break;
+		case "customer_list":
+			stage.setTitle("customer list");
+			stage.setScene(customerTable.s);
+			customerTable.init();
 			break;
 		case "appointment":
 			stage.setTitle("appointment");

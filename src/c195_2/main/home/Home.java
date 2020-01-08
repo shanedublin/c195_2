@@ -15,15 +15,17 @@ public class Home {
 		this.main = main;
 	}
 	Label homeLabel = new Label("Home");
+	Button customerTableButton = new Button("Customer Table");
 	Button customerButton = new Button("Customers");
 	Button appointmentButton = new Button("Appointments");
 	Button calandarButton = new Button ("Calandar");
 	
-	VBox vBox = new  VBox(10, homeLabel, customerButton, appointmentButton, calandarButton);
+	VBox vBox = new  VBox(10, homeLabel, customerTableButton, customerButton, appointmentButton, calandarButton);
 	public Scene s = new Scene(vBox, 480, 480);
 	
 	{
 		
+		customerTableButton.setOnAction((event) -> main.switchScene("customer_list"));
 		customerButton.setOnAction((event) -> main.switchScene("customer"));
 		appointmentButton.setOnAction((event) -> main.switchScene("appointment"));
 		calandarButton.setOnAction((event) -> main.switchScene("calandar"));

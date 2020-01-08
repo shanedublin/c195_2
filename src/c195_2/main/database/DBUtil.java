@@ -9,10 +9,8 @@ import java.sql.Statement;
 
 public class DBUtil {
 
-	public Connection conn = null;
+	public static Connection conn = null;
 //	private Statement stmt = null;
-	private String dbUser = null;
-	private String dbPass = null;
 
 	final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
 	final String DB_URL = "jdbc:mysql://3.227.166.251/U051Ai";
@@ -48,8 +46,9 @@ public class DBUtil {
 		
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			System.out.println("Connecting to database...");
+			System.out.println("Getting connection");
 			if(conn == null) {
+				System.out.println("Connecting to database...");
 				conn = DriverManager.getConnection(DB_URL, DBUSER, DBPASS);
 			}
 		} catch (ClassNotFoundException e) {
@@ -61,9 +60,10 @@ public class DBUtil {
 
 	}
 
-	public void closeConnection() {
+	public static void closeConnection() {
 		try {
 			if (conn != null) {
+				System.out.println("Closing connection");
 				conn.close();
 			}
 		} catch (Exception e) {

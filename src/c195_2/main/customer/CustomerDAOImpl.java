@@ -16,7 +16,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 		String sql = "insert into customer (customerName, addressId, active, createDate, createdBy, lastUpdate, lastUpdateBy) values(?,?,?,?,?,?,?)";
 		Date d = new Date(System.currentTimeMillis());
 		
-		util.insert(sql, c.customerName,"1","true",d.toString(), "Shane", d.toString(),"Shane");
+		util.insert(sql, c.customerName,c.addressId +"", c.active +"",d.toString(), "Shane", d.toString(),"Shane");
 		
 		//util.insert("insert into country (country, createDate, createdBy, lastUpdateBy) values (?,?,?,?)", "Mexico" ,d.toString(), "Shane","Tester");
 		// TODO Auto-generated method stub

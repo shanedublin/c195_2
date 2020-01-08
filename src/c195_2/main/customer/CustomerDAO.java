@@ -4,8 +4,8 @@ import c195_2.main.login.User;
 
 public interface CustomerDAO {
 
-	public Customer add(Customer user);
-	public Customer update(Customer user);
-	public boolean delete(Customer user);
+	public Customer add(Customer customer);
+	public Customer update(Customer customer);
+	public boolean delete(Customer customer);
 	
 }
