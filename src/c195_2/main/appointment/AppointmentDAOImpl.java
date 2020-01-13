@@ -1,6 +1,8 @@
 package c195_2.main.appointment;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 import c195_2.main.database.DBUtil;
 
@@ -35,9 +37,30 @@ public class AppointmentDAOImpl implements AppointmentDAO {
 	}
 
 	@Override
-	public boolean delete(Appointment a) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean delete(Integer id) {
+		String sql = "delete from appointment where appointmentId = ?" ;
+		util.insert(sql, id+"");
+		return true;
+	}
+
+	@Override
+	public List<Appointment> findByUserAndDay(Integer userId, Date date) {
+		
+		Appointment a = new Appointment();
+		a.startTime = new Date(0);
+		a.endTime = new Date(System.currentTimeMillis());
+		a.description = "Bad a description";
+		a.title = "Very important meenting";
+		
+		Appointment b = new Appointment();
+		b.startTime = new Date(0);
+		b.endTime = new Date(System.currentTimeMillis());
+		b.title = "Title is the best";
+		b.description = "Better Descrpito-";
+		ArrayList<Appointment> arrayList = new ArrayList<Appointment>();
+		arrayList.add(a);
+		arrayList.add(b);
+		return arrayList;
 	}
 
 }

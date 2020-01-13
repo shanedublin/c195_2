@@ -9,8 +9,8 @@ import c195_2.main.Entity;
 public class Appointment extends Entity {
 	
 	public Integer appointmentId;
-	public Integer userId;
-	public Integer customerId;
+	public Integer userId = -1;
+	public Integer customerId  = -1;
 	public String title;
 	public String description;
 	public String location;

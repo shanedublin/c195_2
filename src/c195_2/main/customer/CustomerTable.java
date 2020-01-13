@@ -57,21 +57,6 @@ public class CustomerTable {
 		System.out.println("init");
 		List<CustomerView> list = customerBO.loadCustomers();
 		fillPane(list);
-//		data.clear();
-//		Timer t = new Timer();
-//		TimerTask tt = new TimerTask() {
-//			
-//			@Override
-//			public void run() {
-//				System.out.println("run");
-//				Customer customer = new Customer();
-//				customer.customerProp.set("Testing");
-//				data.add(customer);
-//				
-//			}
-//		};
-//		t.schedule(tt, 1000);
-		
 	}
 	
 	public void fillPane(List<CustomerView> list) {

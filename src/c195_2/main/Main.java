@@ -1,7 +1,8 @@
 package c195_2.main;
 
+import c195_2.main.appointment.Appointment;
 import c195_2.main.appointment.AppointmentScene;
-import c195_2.main.calandar.Calandar;
+import c195_2.main.calandar.CalandarScene;
 import c195_2.main.customer.CustomerScene;
 import c195_2.main.customer.CustomerTable;
 import c195_2.main.customer.CustomerView;
@@ -19,7 +20,7 @@ public class Main extends Application {
 	AppointmentScene appointment = new AppointmentScene(this);
 	CustomerScene customer = new CustomerScene(this);
 	CustomerTable customerTable = new CustomerTable(this);
-	Calandar calandar = new Calandar(this);
+	CalandarScene calandar = new CalandarScene(this);
 	
 	public Stage stage;
 	
@@ -34,7 +35,8 @@ public class Main extends Application {
 		primaryStage.setTitle("App");
 		
 		root.getChildren();
-		primaryStage.setScene(home.s);
+//		primaryStage.setScene(home.s);
+		primaryStage.setScene(calandar.s);
 		primaryStage.show();
 		primaryStage.setOnCloseRequest(e -> exit());
 
@@ -69,6 +71,8 @@ public class Main extends Application {
 			break;
 		case "appointment":
 			stage.setTitle("appointment");
+			appointment = new AppointmentScene(this);
+			appointment.setAppointment((Appointment) o);
 			stage.setScene(appointment.s);
 			break;
 		case "calandar":

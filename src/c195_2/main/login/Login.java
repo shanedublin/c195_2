@@ -1,5 +1,6 @@
 package c195_2.main.login;
 
+
 import c195_2.main.Main;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -12,7 +13,13 @@ import javafx.scene.layout.VBox;
 public class Login {
 	
 	
+public static User loggedInUser = new User();
 	
+	{
+		loggedInUser.userId = 4;
+	}
+
+
 	private Main main;
 
 
