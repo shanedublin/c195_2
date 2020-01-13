@@ -25,7 +25,10 @@ public class DBUtil {
 			PreparedStatement prepareStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			for (int i = 0; i < params.length; i++) {
 				String string = params[i];
-				if(string.equalsIgnoreCase("true")) {
+				
+				if(null == string) {
+					prepareStatement.setString(i+1, "");
+				}else if(string.equalsIgnoreCase("true")) {
 					prepareStatement.setInt(i+1, 1);
 				} else {
 					prepareStatement.setString(i+1, string);

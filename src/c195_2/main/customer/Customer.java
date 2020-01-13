@@ -19,7 +19,7 @@ public class Customer {
 	
 	@Override
 	public String toString() {
-		return "Customer Name :" + customerName; 
+		return customerName; 
 	}
 	
 	

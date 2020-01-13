@@ -9,5 +9,10 @@ public class User extends Entity {
 	public String password;
 	public boolean active;
 	
+	@Override
+	public String toString() {
+		return userName;
+	}
+	
 
 }

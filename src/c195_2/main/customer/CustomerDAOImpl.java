@@ -2,6 +2,9 @@ package c195_2.main.customer;
 
 import java.sql.Date;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import c195_2.main.database.DBUtil;
 import c195_2.main.login.User;
@@ -54,6 +57,25 @@ public class CustomerDAOImpl implements CustomerDAO {
 		String sql = "delete from customer where customerId = ?" ;
 		util.insert(sql, id+"");
 		return true;
+	}
+	
+	@Override
+	public List<Customer> getCustomers() {
+		String sql = "select customerId, customerName from customer";
+		
+		ResultSet rs = util.queryDatabase(sql);
+		List<Customer> list = new ArrayList<Customer>();
+		try {
+			while(rs.next()) {
+				Customer u = new Customer();
+				u.customerId = rs.getInt("customerId");
+				u.customerName = rs.getString("customerName");
+				list.add(u);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
 	}
 	
 	
