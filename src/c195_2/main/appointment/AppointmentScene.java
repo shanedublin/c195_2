@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +31,9 @@ import javafx.scene.layout.GridPane;
 import javafx.util.Callback;
 
 public class AppointmentScene {
+
+	private static final String TIME_NOT_IN_BUISNESS_HOURS = "Time not in buisness hours (9am-5pm)";
+	private static final String ALL_FIELDS_REQUIRED = "All fields required";
 
 	AppointmentDAO dao = new AppointmentDAOImpl();
 
@@ -74,6 +78,8 @@ public class AppointmentScene {
 	DatePicker endDate = new DatePicker();
 	TextField endTime = new TextField();
 	ComboBox<String> endMeridiem = new ComboBox<String>();
+	
+	Label errorLabel = new Label(TIME_NOT_IN_BUISNESS_HOURS);
 
 	Button saveButton = new Button("Save");
 	Button cancelButton = new Button("Home");
@@ -149,9 +155,12 @@ public class AppointmentScene {
 		pane.add(endDate, 1, 9);
 		pane.add(endTime, 2, 9);
 		pane.add(endMeridiem, 3, 9);
+		
+		pane.add(errorLabel, 0, 10,4,1);
+		errorLabel.setVisible(false);
 
-		pane.add(saveButton, 0, 10);
-		pane.add(cancelButton, 1, 10);
+		pane.add(saveButton, 0, 11);
+		pane.add(cancelButton, 1, 11);
 //		pane.add(deleteButton, 2, 10);
 
 		cancelButton.setOnAction((event) -> main.switchScene("home"));
@@ -192,15 +201,25 @@ public class AppointmentScene {
 	public static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-M-d-h:m-a");
 
 	public void save() {
-		appointment.customerId = customerComboBox.getSelectionModel().getSelectedItem().customerId;
-		appointment.userId = userComboBox.getSelectionModel().getSelectedItem().userId;
-		appointment.title = title.getText();
-		appointment.description = description.getText();
-		appointment.location = location.getText();
-		appointment.contact = contact.getText();
-		appointment.type = type.getText();
-		appointment.url = url.getText();
+		try {
+			appointment.customerId = customerComboBox.getSelectionModel().getSelectedItem().customerId;
+			appointment.userId = userComboBox.getSelectionModel().getSelectedItem().userId;
+			appointment.title = title.getText();
+			appointment.description = description.getText();
+			appointment.location = location.getText();
+			appointment.contact = contact.getText();
+			appointment.type = type.getText();
+			appointment.url = url.getText();
+			
+		} catch (Exception e) {
+			errorLabel.setText(ALL_FIELDS_REQUIRED);
+			errorLabel.setVisible(true);
+			e.printStackTrace();
+			return;
+		}
 
+		
+		
 		LocalDate startValue = startDate.getValue();
 		String startString = startValue.getYear() + "-" + startValue.getMonthValue() + "-" + startValue.getDayOfMonth()
 				+ "-" + startTime.getText() + "-" + startMeridiem.getValue();
@@ -210,14 +229,23 @@ public class AppointmentScene {
 				+ endTime.getText() + "-" + endMeridiem.getValue();
 
 		try {
+			System.out.println(startString);
+			System.out.println(endString);
 			appointment.startTime = new Timestamp(dateFormat.parse(startString).getTime());
 //			appointment.startTime = appointment.startTime.u
 			appointment.endTime = new Timestamp(dateFormat.parse(endString).getTime());
+			
+			
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-
-		dao.addOrUpdate(appointment);
+		if(buisnessTime(appointment.startTime, appointment.endTime)) {
+			dao.addOrUpdate(appointment);
+			errorLabel.setVisible(false);
+		} else {
+			errorLabel.setText(TIME_NOT_IN_BUISNESS_HOURS);
+			errorLabel.setVisible(true);
+		}
 
 	}
 
@@ -238,7 +266,7 @@ public class AppointmentScene {
 		System.out.println(a.appointmentId);
 		appointment = a;
 
-		pane.add(deleteButton, 2, 10);
+		pane.add(deleteButton, 2, 11);
 
 		// used to filter customers. used a lamda to simplify code and make searching faster
 		Optional<Customer> customerOptional = customers.stream().filter(cus -> a.customerId == cus.customerId)
@@ -269,6 +297,34 @@ public class AppointmentScene {
 		endTime.setText(sdf.format(a.endTime));
 		endMeridiem.setValue(merediem.format(a.endTime));
 
+	}
+	/**
+	 * Open 7 days a week from 9am-5pm
+	 * @param startTime
+	 * @param startMer
+	 * @param endTime
+	 * @param endMer
+	 * @return
+	 */
+	public static boolean buisnessTime(Timestamp startTime, Timestamp endTime) {
+		return inHours(startTime) && inHours(endTime);
+	}
+	
+	public static boolean inHours(Timestamp ts) {
+		Calendar open = Calendar.getInstance();
+		open.setTime(ts);
+		open.set(Calendar.HOUR_OF_DAY, 8);
+		open.set(Calendar.MINUTE, 59);
+		
+		Calendar close = Calendar.getInstance();
+		close.setTime(ts);
+		close.set(Calendar.HOUR_OF_DAY, 17);
+		close.set(Calendar.MINUTE, 1);
+
+		Calendar c = Calendar.getInstance();
+		c.setTime(ts);
+		return c.after(open) && c.before(close);
+		
 	}
 
 }
