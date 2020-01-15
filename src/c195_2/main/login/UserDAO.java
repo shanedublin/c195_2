@@ -8,4 +8,5 @@ public interface UserDAO {
 	public User find(Integer id);
 	public List<User> getUsers();
 	public boolean delete(Integer id);
+	public User validateUser(User u);
 }

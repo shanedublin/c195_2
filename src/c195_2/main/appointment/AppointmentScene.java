@@ -240,8 +240,11 @@ public class AppointmentScene {
 
 		pane.add(deleteButton, 2, 10);
 
+		// used to filter customers. used a lamda to simplify code and make searching faster
 		Optional<Customer> customerOptional = customers.stream().filter(cus -> a.customerId == cus.customerId)
 				.findAny();
+		
+		// used to filter users. used a lamda to simplify code and make searching faster
 		Optional<User> userOptional = users.stream().filter(cus -> a.userId == cus.userId).findAny();
 
 		if (customerOptional.isPresent()) {

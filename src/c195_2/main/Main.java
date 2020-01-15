@@ -36,7 +36,8 @@ public class Main extends Application {
 		
 		root.getChildren();
 //		primaryStage.setScene(home.s);
-		primaryStage.setScene(calandar.s);
+//		primaryStage.setScene(calandar.s);
+		primaryStage.setScene(login.s);
 		primaryStage.show();
 		primaryStage.setOnCloseRequest(e -> exit());
 

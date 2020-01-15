@@ -4,7 +4,7 @@ import c195_2.main.Entity;
 
 public class User extends Entity {
 	
-	public int userId;
+	public Integer userId;
 	public String userName;
 	public String password;
 	public boolean active;
