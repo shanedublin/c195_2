@@ -3,6 +3,7 @@ package c195_2.main.appointment;
 import static org.junit.Assert.assertTrue;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -36,8 +37,8 @@ public class ApppointmentDAOImplTest {
 		
 		a.url = "https://google.com";
 		a.userId = 1;
-		a.startTime = new Date(System.currentTimeMillis());
-		a.endTime = new Date(System.currentTimeMillis());
+		a.startTime = new Timestamp(System.currentTimeMillis());
+		a.endTime = new Timestamp(System.currentTimeMillis());
 		dao.addOrUpdate(a);
 		assertTrue(a.appointmentId > 0);
 	}

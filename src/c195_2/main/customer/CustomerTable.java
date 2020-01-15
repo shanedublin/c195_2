@@ -32,12 +32,13 @@ public class CustomerTable {
 	Label nameLabel = new Label("Name");
 	Label editLabel = new Label("Edit");
 	Label deleteLabel = new Label("Delete");
-	
+	Button cancelButton = new Button("Home");
 	
 	{
-		
+		cancelButton.setOnAction((event) -> main.switchScene("home"));
 		pane.add(nameLabel, 0, 0);
 		pane.add(editLabel, 1, 0);
+		pane.add(cancelButton, 2, 0);
 		pane.setPadding(new Insets(10, 10, 10, 10));
 
 		pane.setVgap(5);

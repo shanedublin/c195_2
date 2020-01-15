@@ -1,15 +1,27 @@
 package c195_2.main.appointment;
 
 import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 
 import c195_2.main.database.DBUtil;
 
 public class AppointmentDAOImpl implements AppointmentDAO {
 
 	DBUtil util = new DBUtil();
-	
+	SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd hh:mm a");
+	SimpleDateFormat sdfUTC = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+	{
+		sdfUTC.setTimeZone(TimeZone.getTimeZone("UTC"));
+	}
 	@Override
 	public Appointment addOrUpdate(Appointment a) {
 
@@ -22,7 +34,10 @@ public class AppointmentDAOImpl implements AppointmentDAO {
 		
 		Date d = new Date(System.currentTimeMillis());
 		Integer id = util.insert(sql, a.title, a.customerId + "", a.userId + "",
-				a.description, a.location, a.contact, a.type, a.url, a.startTime.toString(), a.endTime.toString(), d.toString(), "Shane", d.toString(),"Shane");
+				a.description, a.location, a.contact, a.type, a.url, 
+				sdfUTC.format(a.startTime),
+				sdfUTC.format(a.endTime),
+				d.toString(), "Shane", d.toString(),"Shane");
 		if(a.appointmentId == null) {
 			a.appointmentId = id;
 		}
@@ -45,22 +60,32 @@ public class AppointmentDAOImpl implements AppointmentDAO {
 
 	@Override
 	public List<Appointment> findByUserAndDay(Integer userId, Date date) {
+		String sql = "select * from appointment where userId = ? and start between ? and ?"; 
+		ResultSet rs = util.queryDatabase(sql, userId +"", date.toString(), date.toString()+":23:59:59");
+		List<Appointment> list = new ArrayList<Appointment>();
+		try {
+			while (rs.next()) {
+				Appointment a = new Appointment();
+				a.appointmentId  = rs.getInt("appointmentId");
+				a.title = rs.getString("title");
+				a.customerId = rs.getInt("customerId");
+				a.userId = rs.getInt("userId");
+				a.description = rs.getString("description");
+				a.location = rs.getString("location");
+				a.contact = rs.getString("contact");
+				a.type = rs.getString("type");
+				a.url = rs.getString("url");
+				a.startTime = rs.getTimestamp("start");
+				LocalDate convertedDate = ZonedDateTime.of(a.startTime.toLocalDateTime(), ZonedDateTime.now().getZone()).toLocalDate();
+				System.out.println(sdf.format(Date.valueOf(convertedDate)));
+				a.endTime = rs.getTimestamp("end");
+				list.add(a);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		
-		Appointment a = new Appointment();
-		a.startTime = new Date(0);
-		a.endTime = new Date(System.currentTimeMillis());
-		a.description = "Bad a description";
-		a.title = "Very important meenting";
-		
-		Appointment b = new Appointment();
-		b.startTime = new Date(0);
-		b.endTime = new Date(System.currentTimeMillis());
-		b.title = "Title is the best";
-		b.description = "Better Descrpito-";
-		ArrayList<Appointment> arrayList = new ArrayList<Appointment>();
-		arrayList.add(a);
-		arrayList.add(b);
-		return arrayList;
+		return list;
 	}
 
 }

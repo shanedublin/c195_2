@@ -16,7 +16,7 @@ public class Login {
 public static User loggedInUser = new User();
 	
 	{
-		loggedInUser.userId = 4;
+		loggedInUser.userId = 1;
 	}
 
 

@@ -2,6 +2,7 @@ package c195_2.main.appointment;
 
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 import c195_2.main.Entity;
 
@@ -18,7 +19,7 @@ public class Appointment extends Entity {
 	public String type;
 	public String url;
 	
-	public Date startTime;
-	public Date endTime;
+	public Timestamp startTime;
+	public Timestamp endTime;
 
 }

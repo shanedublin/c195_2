@@ -76,6 +76,7 @@ public class Main extends Application {
 			stage.setScene(appointment.s);
 			break;
 		case "calandar":
+			calandar = new CalandarScene(this);
 			stage.setTitle("calandar");
 			stage.setScene(calandar.s);
 			break;

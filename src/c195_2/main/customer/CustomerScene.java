@@ -38,7 +38,7 @@ public class CustomerScene {
 	TextField phoneText = new TextField();
 
 	Button saveButton = new Button("Save");
-	Button cancelButton = new Button("Cancel");
+	Button cancelButton = new Button("Home");
 	Button deleteButton = new Button("Delete");
 
 	public Scene s = new Scene(pane, 480, 480);

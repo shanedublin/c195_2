@@ -37,10 +37,8 @@ public class CalandarScene {
 	Button weekButton = new Button("Week");
 	Button monthButton = new Button("Month");
 	Button saveButton = new Button("Save");
-	Button cancelButton = new Button("Back");
-//	HBox saveBox = new HBox(10, saveButton, cancelButton);
+	Button cancelButton = new Button("Home");
 	HBox dateBox = new HBox(10, datePicker,weekButton,monthButton, cancelButton);
-//	VBox box = new VBox(10, dateBox,saveBox);
 	
 	AppointmentDAO dao = new AppointmentDAOImpl();
 	

@@ -1,6 +1,7 @@
 package c195_2.main.appointment;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -75,7 +76,7 @@ public class AppointmentScene {
 	ComboBox<String> endMeridiem = new ComboBox<String>();
 
 	Button saveButton = new Button("Save");
-	Button cancelButton = new Button("Cancel");
+	Button cancelButton = new Button("Home");
 	Button deleteButton = new Button("Delete");
 
 	public Scene s = new Scene(pane, 480, 480);
@@ -186,8 +187,6 @@ public class AppointmentScene {
 
 	public AppointmentScene(Main main) {
 		this.main = main;
-
-		// TODO Auto-generated constructor stub
 	}
 
 	public static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-M-d-h:m-a");
@@ -211,8 +210,9 @@ public class AppointmentScene {
 				+ endTime.getText() + "-" + endMeridiem.getValue();
 
 		try {
-			appointment.startTime = new Date(dateFormat.parse(startString).getTime());
-			appointment.endTime = new Date(dateFormat.parse(endString).getTime());
+			appointment.startTime = new Timestamp(dateFormat.parse(startString).getTime());
+//			appointment.startTime = appointment.startTime.u
+			appointment.endTime = new Timestamp(dateFormat.parse(endString).getTime());
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -235,6 +235,7 @@ public class AppointmentScene {
 			pane.getChildren().remove(deleteButton);
 			return;
 		}
+		System.out.println(a.appointmentId);
 		appointment = a;
 
 		pane.add(deleteButton, 2, 10);
@@ -257,11 +258,11 @@ public class AppointmentScene {
 		type.setText(a.type);
 		url.setText(a.url);
 
-		startDate.setValue(a.startTime.toLocalDate());
+		startDate.setValue(a.startTime.toLocalDateTime().toLocalDate());
 		startTime.setText(sdf.format(a.startTime));
 		startMeridiem.setValue(merediem.format(a.startTime));
 
-		endDate.setValue(a.endTime.toLocalDate());
+		endDate.setValue(a.endTime.toLocalDateTime().toLocalDate());
 		endTime.setText(sdf.format(a.endTime));
 		endMeridiem.setValue(merediem.format(a.endTime));
 
