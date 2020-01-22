@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.Locale;
 
 import c195_2.main.Main;
+import c195_2.main.appointment.AppointmentDAOImpl;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -99,7 +100,8 @@ public static User loggedInUser = new User();
 	
 	public void updateLoginFile() {
 		LocalDateTime now = LocalDateTime.now();
-		String msg = loggedInUser.userName +" : " + now.toString() + System.lineSeparator();
+		Timestamp ts = Timestamp.valueOf(now);
+		String msg = loggedInUser.userName +" = " + AppointmentDAOImpl.sdf.format(ts) + System.lineSeparator();
 		try {
 			Files.write(Paths.get("./login.txt"), msg.getBytes(), StandardOpenOption.APPEND );
 		} catch (IOException e) {

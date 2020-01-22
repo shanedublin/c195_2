@@ -19,6 +19,18 @@ public class UserDAOImpl implements UserDAO {
 
 	@Override
 	public User find(Integer id) {
+		String sql = "select * from user where userId= ?";
+		ResultSet rs = util.queryDatabase(sql, id +"");
+		try {
+			while (rs.next()) {
+				User u = new User();
+				u.userId = rs.getInt("userId");
+				u.userName = rs.getString("userName");
+				return u;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		// TODO Auto-generated method stub
 		return null;
 	}

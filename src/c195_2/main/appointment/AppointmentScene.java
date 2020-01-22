@@ -28,12 +28,14 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.util.Callback;
 
 public class AppointmentScene {
 
+	private static final String APPOINTMENTS_CAN_NOT_OVERLAP = "Appointments can not overlap.";
 	private static final String TIME_NOT_IN_BUISNESS_HOURS = "Time not in buisness hours (9am-5pm)";
-	private static final String ALL_FIELDS_REQUIRED = "All fields required";
+	private static final String ALL_FIELDS_REQUIRED = "All fields are required.";
 
 	AppointmentDAO dao = new AppointmentDAOImpl();
 
@@ -191,6 +193,8 @@ public class AppointmentScene {
 
 		saveButton.setOnAction((event) -> save());
 		deleteButton.setOnAction((event) -> this.delete(event));
+		
+		errorLabel.setTextFill(Color.DARKRED);
 
 	}
 
@@ -201,6 +205,7 @@ public class AppointmentScene {
 	public static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-M-d-h:m-a");
 
 	public void save() {
+		
 		try {
 			appointment.customerId = customerComboBox.getSelectionModel().getSelectedItem().customerId;
 			appointment.userId = userComboBox.getSelectionModel().getSelectedItem().userId;
@@ -239,6 +244,14 @@ public class AppointmentScene {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
+		
+		if(overlappingAppoinments()) {
+			errorLabel.setText(APPOINTMENTS_CAN_NOT_OVERLAP);
+			errorLabel.setVisible(true);
+			return;
+		}
+		
+		
 		if(buisnessTime(appointment.startTime, appointment.endTime)) {
 			dao.addOrUpdate(appointment);
 			errorLabel.setVisible(false);
@@ -247,6 +260,10 @@ public class AppointmentScene {
 			errorLabel.setVisible(true);
 		}
 
+	}
+
+	private boolean overlappingAppoinments() {
+		return dao.appoinmentOverlaps(appointment);
 	}
 
 	private void delete(ActionEvent event) {

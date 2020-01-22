@@ -1,7 +1,10 @@
 package c195_2.main;
 
 import c195_2.main.appointment.Appointment;
+import c195_2.main.appointment.AppointmentReport;
+import c195_2.main.appointment.AppointmentReportScene;
 import c195_2.main.appointment.AppointmentScene;
+import c195_2.main.appointment.UserReportScene;
 import c195_2.main.calandar.CalandarScene;
 import c195_2.main.customer.CustomerScene;
 import c195_2.main.customer.CustomerTable;
@@ -9,6 +12,7 @@ import c195_2.main.customer.CustomerView;
 import c195_2.main.database.DBUtil;
 import c195_2.main.home.Home;
 import c195_2.main.login.Login;
+import c195_2.main.login.LoginReportScene;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.stage.Stage;
@@ -21,6 +25,9 @@ public class Main extends Application {
 	CustomerScene customer = new CustomerScene(this);
 	CustomerTable customerTable = new CustomerTable(this);
 	CalandarScene calandar = new CalandarScene(this);
+	AppointmentReportScene appointmentReport = new AppointmentReportScene(this);
+	UserReportScene userReportScene  = new UserReportScene(this);
+	LoginReportScene loginReport = new LoginReportScene(this);
 	
 	public Stage stage;
 	
@@ -38,6 +45,7 @@ public class Main extends Application {
 //		primaryStage.setScene(home.s);
 //		primaryStage.setScene(calandar.s);
 		primaryStage.setScene(login.s);
+//		primaryStage.setScene(appointment.s);
 		primaryStage.show();
 		primaryStage.setOnCloseRequest(e -> exit());
 
@@ -53,9 +61,11 @@ public class Main extends Application {
 	
 	public void switchScene(String scene, Object o) {
 		scene = scene.toLowerCase();
+		System.out.println(scene);
 		switch (scene) {
 		case "home":
 			stage.setTitle("home");
+			home.checkAppoinments();
 			stage.setScene(home.s);
 			break;
 		case "customer":
@@ -76,11 +86,21 @@ public class Main extends Application {
 			appointment.setAppointment((Appointment) o);
 			stage.setScene(appointment.s);
 			break;
+		case "appointmentreport":
+			appointmentReport.loadReport();
+			stage.setTitle("appointment report");
+			stage.setScene(appointmentReport.s);
+			break;
 		case "calandar":
 			calandar = new CalandarScene(this);
 			stage.setTitle("calandar");
 			stage.setScene(calandar.s);
 			break;
+		case "loginreport":
+			stage.setTitle("login report");
+			stage.setScene(loginReport.s);
+			break;
+			
 			
 		default:
 			break;

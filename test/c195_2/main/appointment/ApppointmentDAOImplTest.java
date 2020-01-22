@@ -38,8 +38,21 @@ public class ApppointmentDAOImplTest {
 		a.url = "https://google.com";
 		a.userId = 1;
 		a.startTime = new Timestamp(System.currentTimeMillis());
-		a.endTime = new Timestamp(System.currentTimeMillis());
+		a.endTime = new Timestamp(System.currentTimeMillis() + 10000);
 		dao.addOrUpdate(a);
 		assertTrue(a.appointmentId > 0);
+	}
+	
+	
+	@Test
+	public void testOverlap() {
+		Appointment a = new Appointment();
+		a.userId  = 1;
+		a.customerId = 4;
+		a.startTime = new Timestamp(System.currentTimeMillis() + 50);
+		a.startTime = new Timestamp(System.currentTimeMillis() + 50);
+		boolean appoinmentOverlaps = dao.appoinmentOverlaps(a);
+		
+		assertTrue(appoinmentOverlaps);
 	}
 }

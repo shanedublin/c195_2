@@ -9,16 +9,19 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 import c195_2.main.database.DBUtil;
 
 public class AppointmentDAOImpl implements AppointmentDAO {
 
 	DBUtil util = new DBUtil();
-	SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd hh:mm a");
-	SimpleDateFormat sdfUTC = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+	public static SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd hh:mm a");
+	public static SimpleDateFormat sdfUTC = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 	{
 		sdfUTC.setTimeZone(TimeZone.getTimeZone("UTC"));
 	}
@@ -65,20 +68,7 @@ public class AppointmentDAOImpl implements AppointmentDAO {
 		List<Appointment> list = new ArrayList<Appointment>();
 		try {
 			while (rs.next()) {
-				Appointment a = new Appointment();
-				a.appointmentId  = rs.getInt("appointmentId");
-				a.title = rs.getString("title");
-				a.customerId = rs.getInt("customerId");
-				a.userId = rs.getInt("userId");
-				a.description = rs.getString("description");
-				a.location = rs.getString("location");
-				a.contact = rs.getString("contact");
-				a.type = rs.getString("type");
-				a.url = rs.getString("url");
-				a.startTime = rs.getTimestamp("start");
-				LocalDate convertedDate = ZonedDateTime.of(a.startTime.toLocalDateTime(), ZonedDateTime.now().getZone()).toLocalDate();
-				System.out.println(sdf.format(Date.valueOf(convertedDate)));
-				a.endTime = rs.getTimestamp("end");
+				Appointment a = new Appointment(rs);
 				list.add(a);
 			}
 		} catch (SQLException e) {
@@ -86,6 +76,81 @@ public class AppointmentDAOImpl implements AppointmentDAO {
 		}
 		
 		return list;
+	}
+
+	@Override
+	public boolean appoinmentOverlaps(Appointment a) {
+		
+		String sql = "select * from appointment where (userId = ? or customerId = ?) and ? between start and end";
+		
+		if(a.appointmentId != null) {
+			sql += " and appointmentId != " + a.appointmentId;
+		}
+		
+		ResultSet rs = util.queryDatabase(sql, a.userId + "", a.customerId + "", sdfUTC.format(a.startTime)) ;
+		try {
+			while(rs.next()) {
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return false;
+	}
+
+	@Override
+	public Appointment in15Mins(Integer userId) {
+
+		String sql = "select * from appointment where userId = ? and start between ? and ?";
+
+		Timestamp now = new Timestamp(System.currentTimeMillis());
+		Timestamp now15 = new Timestamp(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(15));
+		ResultSet rs = util.queryDatabase(sql, userId + "", sdfUTC.format(now), sdfUTC.format(now15));
+
+		try {
+			while(rs.next()) {
+				Appointment a = new Appointment(rs);
+				return a;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+			
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<AppointmentReport> getAppoinmentReport() throws SQLException{
+		List<Appointment> appointmentList = getAllAppointments();
+		
+		Map<String, AppointmentReport> map = new HashMap<String, AppointmentReport>();
+		appointmentList.stream().forEach(a-> {
+			AppointmentReport ar = map.getOrDefault(a.type, new AppointmentReport());
+			ar.number ++;
+			ar.type = a.type;
+			map.put(a.type, ar);
+		});
+		
+		return new ArrayList<AppointmentReport>(map.values());
+	}
+
+	@Override
+	public List<Appointment> getAllAppointments() {
+		String sql = "select * from appointment";
+		ResultSet rs = util.queryDatabase(sql);
+		
+		List<Appointment> appointmentList = new ArrayList<Appointment>();
+		try {
+			while(rs.next()) {
+				Appointment a = new Appointment(rs);
+				appointmentList.add(a);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return appointmentList;
 	}
 
 }
