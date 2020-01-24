@@ -7,7 +7,7 @@ public class AppointmentReport {
 
 	@Override
 	public String toString() {
-		return "Type: " + type + " Number: " + number;
+		return "No. meetings: "+number+ "  Type: " + type;
 	}
 
 }

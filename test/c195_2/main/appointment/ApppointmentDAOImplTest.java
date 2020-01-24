@@ -30,10 +30,10 @@ public class ApppointmentDAOImplTest {
 		Appointment a = new Appointment();
 		a.title = "The Title";
 		a.customerId = 4;
-		a.description = "descrip";
+		a.description = "the Best description";
 		a.location = "The place";
 		a.contact = "The secret";
-		a.type = "Who fuking knows";
+		a.type = "FBI";
 		
 		a.url = "https://google.com";
 		a.userId = 1;

@@ -28,7 +28,7 @@ public class AppointmentReportScene {
 
 	GridPane pane = new GridPane();
 
-	Label title = new Label("Number of Appointments by type");
+	Label title = new Label("Appointments listed by user");
 	Button cancelButton = new Button("Home");
 
 	ScrollPane sp = new ScrollPane();

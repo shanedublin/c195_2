@@ -28,8 +28,8 @@ public class Home {
 	Button customerButton = new Button("Create Customer");
 	Button appointmentButton = new Button("Create Appointment");
 	Button calandarButton = new Button ("View Calandar");
-	Button numberOfAppointments = new Button("Appointment Report");
-	Button userReport = new Button("User Report");
+	Button numberOfAppointments = new Button("Appointment Type Report");
+	Button userReport = new Button("User Schedule Report");
 	Button customReport = new Button("Login Report");
 	
 	
@@ -45,7 +45,8 @@ public class Home {
 		customerButton.setOnAction((event) -> main.switchScene("customer"));
 		appointmentButton.setOnAction((event) -> main.switchScene("appointment"));
 		calandarButton.setOnAction((event) -> main.switchScene("calandar"));
-		numberOfAppointments.setOnAction((even) -> main.switchScene("appointmentReport"));
+		numberOfAppointments.setOnAction((even) -> main.switchScene("typereport"));
+		userReport.setOnAction((even) -> main.switchScene("appointmentreport"));
 		customReport.setOnAction((even) -> main.switchScene("loginreport"));
 		appointmentWarning.setTextFill(Color.DARKRED);
 	}

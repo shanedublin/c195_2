@@ -12,7 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
-public class UserReportScene {
+public class AppointmentByTypeReportScene {
 
 	AppointmentDAO dao = new AppointmentDAOImpl();
 
@@ -40,7 +40,7 @@ public class UserReportScene {
 		cancelButton.setOnAction((event) -> main.switchScene("home"));
 	}
 
-	public UserReportScene(Main main) {
+	public AppointmentByTypeReportScene(Main main) {
 		this.main = main;
 	}
 
@@ -51,6 +51,7 @@ public class UserReportScene {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		System.out.println(list.size());
 		box.getChildren().clear();
 		list.stream()
 			.sorted((a, b) -> a.type.compareTo(b.type))

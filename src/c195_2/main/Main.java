@@ -4,7 +4,7 @@ import c195_2.main.appointment.Appointment;
 import c195_2.main.appointment.AppointmentReport;
 import c195_2.main.appointment.AppointmentReportScene;
 import c195_2.main.appointment.AppointmentScene;
-import c195_2.main.appointment.UserReportScene;
+import c195_2.main.appointment.AppointmentByTypeReportScene;
 import c195_2.main.calandar.CalandarScene;
 import c195_2.main.customer.CustomerScene;
 import c195_2.main.customer.CustomerTable;
@@ -26,7 +26,7 @@ public class Main extends Application {
 	CustomerTable customerTable = new CustomerTable(this);
 	CalandarScene calandar = new CalandarScene(this);
 	AppointmentReportScene appointmentReport = new AppointmentReportScene(this);
-	UserReportScene userReportScene  = new UserReportScene(this);
+	AppointmentByTypeReportScene typeReport  = new AppointmentByTypeReportScene(this);
 	LoginReportScene loginReport = new LoginReportScene(this);
 	
 	public Stage stage;
@@ -85,6 +85,11 @@ public class Main extends Application {
 			appointment = new AppointmentScene(this);
 			appointment.setAppointment((Appointment) o);
 			stage.setScene(appointment.s);
+			break;
+		case "typereport":
+			typeReport.loadReport();
+			stage.setTitle("user report");
+			stage.setScene(typeReport.s);
 			break;
 		case "appointmentreport":
 			appointmentReport.loadReport();
