@@ -39,6 +39,7 @@ public class Appointment extends Entity {
 		this.type = rs.getString("type");
 		this.url = rs.getString("url");
 		this.startTime = rs.getTimestamp("start");
+		System.out.println(rs.getTimestamp("start"));
 		this.endTime = rs.getTimestamp("end");
 	}
 

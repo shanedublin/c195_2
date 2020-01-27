@@ -21,7 +21,7 @@ public class AppointmentDAOImpl implements AppointmentDAO {
 
 	DBUtil util = new DBUtil();
 	public static SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd hh:mm a");
-	public static SimpleDateFormat sdfUTC = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+	public static SimpleDateFormat sdfUTC = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss");
 	{
 		sdfUTC.setTimeZone(TimeZone.getTimeZone("UTC"));
 	}
@@ -35,6 +35,8 @@ public class AppointmentDAOImpl implements AppointmentDAO {
 			sql = "update appointment set title = ?, customerId = ?, userId = ?, description = ?, location = ?, contact = ?, type = ?, url = ?, start = ?, end = ?, createDate = ?, createdBy = ?, lastUpdate = ?, lastUpdateBy = ? where appointmentId = " + a.appointmentId;
 		}
 		
+		System.out.println(sdf.format(a.startTime));
+		System.out.println(sdf.format(a.endTime));
 		Date d = new Date(System.currentTimeMillis());
 		Integer id = util.insert(sql, a.title, a.customerId + "", a.userId + "",
 				a.description, a.location, a.contact, a.type, a.url, 
@@ -46,6 +48,11 @@ public class AppointmentDAOImpl implements AppointmentDAO {
 		}
 		return a;
 		
+	}
+	
+	public String convertDate(Timestamp ts) {
+		
+		return "";
 	}
 
 	@Override

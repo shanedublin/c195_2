@@ -80,7 +80,7 @@ public class AppointmentScene {
 	DatePicker endDate = new DatePicker();
 	TextField endTime = new TextField();
 	ComboBox<String> endMeridiem = new ComboBox<String>();
-	
+
 	Label errorLabel = new Label(TIME_NOT_IN_BUISNESS_HOURS);
 
 	Button saveButton = new Button("Save");
@@ -157,8 +157,8 @@ public class AppointmentScene {
 		pane.add(endDate, 1, 9);
 		pane.add(endTime, 2, 9);
 		pane.add(endMeridiem, 3, 9);
-		
-		pane.add(errorLabel, 0, 10,4,1);
+
+		pane.add(errorLabel, 0, 10, 4, 1);
 		errorLabel.setVisible(false);
 
 		pane.add(saveButton, 0, 11);
@@ -193,7 +193,7 @@ public class AppointmentScene {
 
 		saveButton.setOnAction((event) -> save());
 		deleteButton.setOnAction((event) -> this.delete(event));
-		
+
 		errorLabel.setTextFill(Color.DARKRED);
 
 	}
@@ -205,7 +205,7 @@ public class AppointmentScene {
 	public static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-M-d-h:m-a");
 
 	public void save() {
-		
+
 		try {
 			appointment.customerId = customerComboBox.getSelectionModel().getSelectedItem().customerId;
 			appointment.userId = userComboBox.getSelectionModel().getSelectedItem().userId;
@@ -215,7 +215,7 @@ public class AppointmentScene {
 			appointment.contact = contact.getText();
 			appointment.type = type.getText();
 			appointment.url = url.getText();
-			
+
 		} catch (Exception e) {
 			errorLabel.setText(ALL_FIELDS_REQUIRED);
 			errorLabel.setVisible(true);
@@ -223,12 +223,10 @@ public class AppointmentScene {
 			return;
 		}
 
-		
-		
+		System.out.println(startMeridiem.getValue());
 		LocalDate startValue = startDate.getValue();
 		String startString = startValue.getYear() + "-" + startValue.getMonthValue() + "-" + startValue.getDayOfMonth()
 				+ "-" + startTime.getText() + "-" + startMeridiem.getValue();
-
 		LocalDate endValue = endDate.getValue();
 		String endString = endValue.getYear() + "-" + endValue.getMonthValue() + "-" + endValue.getDayOfMonth() + "-"
 				+ endTime.getText() + "-" + endMeridiem.getValue();
@@ -239,20 +237,18 @@ public class AppointmentScene {
 			appointment.startTime = new Timestamp(dateFormat.parse(startString).getTime());
 //			appointment.startTime = appointment.startTime.u
 			appointment.endTime = new Timestamp(dateFormat.parse(endString).getTime());
-			
-			
+
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		
-		if(overlappingAppoinments()) {
+
+		if (overlappingAppoinments()) {
 			errorLabel.setText(APPOINTMENTS_CAN_NOT_OVERLAP);
 			errorLabel.setVisible(true);
 			return;
 		}
-		
-		
-		if(buisnessTime(appointment.startTime, appointment.endTime)) {
+
+		if (buisnessTime(appointment.startTime, appointment.endTime)) {
 			dao.addOrUpdate(appointment);
 			errorLabel.setVisible(false);
 		} else {
@@ -285,10 +281,11 @@ public class AppointmentScene {
 
 		pane.add(deleteButton, 2, 11);
 
-		// used to filter customers. used a lamda to simplify code and make searching faster
+		// used to filter customers. used a lamda to simplify code and make searching
+		// faster
 		Optional<Customer> customerOptional = customers.stream().filter(cus -> a.customerId == cus.customerId)
 				.findAny();
-		
+
 		// used to filter users. used a lamda to simplify code and make searching faster
 		Optional<User> userOptional = users.stream().filter(cus -> a.userId == cus.userId).findAny();
 
@@ -315,8 +312,10 @@ public class AppointmentScene {
 		endMeridiem.setValue(merediem.format(a.endTime));
 
 	}
+
 	/**
 	 * Open 7 days a week from 9am-5pm
+	 * 
 	 * @param startTime
 	 * @param startMer
 	 * @param endTime
@@ -326,13 +325,13 @@ public class AppointmentScene {
 	public static boolean buisnessTime(Timestamp startTime, Timestamp endTime) {
 		return inHours(startTime) && inHours(endTime);
 	}
-	
+
 	public static boolean inHours(Timestamp ts) {
 		Calendar open = Calendar.getInstance();
 		open.setTime(ts);
 		open.set(Calendar.HOUR_OF_DAY, 8);
 		open.set(Calendar.MINUTE, 59);
-		
+
 		Calendar close = Calendar.getInstance();
 		close.setTime(ts);
 		close.set(Calendar.HOUR_OF_DAY, 17);
@@ -341,7 +340,7 @@ public class AppointmentScene {
 		Calendar c = Calendar.getInstance();
 		c.setTime(ts);
 		return c.after(open) && c.before(close);
-		
+
 	}
 
 }
